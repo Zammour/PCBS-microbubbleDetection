@@ -5,4 +5,4 @@
 
 <p>In clinics, echography is widely used to detect vessels and uses the well-known Doppler-effect. We can increase considerably the images by injecting parenterally contrast agent that are microbubbles of gas. We can further increase the acquisition time to detect microvessels up to tens of µm.</p>
 
-<p>In this project, I aim to model *in silico* vessels by simulating microbubble loclization. Then, I will try to separate the microbubbles depending on their speed to improve detection, as in [*C. Huang et al., 2020*](<https://www.google.fr>) .</p>
+<p>In this project, I aim to model *in silico* vessels by simulating microbubble loclization. Then, I will try to separate the microbubbles depending on their speed to improve detection, as in [Illinois](<https://www.nature.com/articles/s41598-020-62898-9>) .</p>
