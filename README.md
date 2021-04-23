@@ -4,7 +4,7 @@
 [*(O. Courure, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>)
 
 <p align="center">
-  <img width="460" height="300" src='https://ieeexplore.ieee.org/mediastore_new/IEEE/content/media/58/8423254/8396283/coutu1-2850811-large.gif'>
+  <img width="460" height="300" src="https://ieeexplore.ieee.org/mediastore_new/IEEE/content/media/58/8423254/8396283/coutu1-2850811-large.gif">
 </p>
   
 Echography is widely used in the clinic to detect vessels by means of the well known Doppler-effect. We can increase considerably the images by injecting parenterally contrast agent that are microbubbles of gas. We can further increase the acquisition time in order to detect microvessels up to tens of µm.
