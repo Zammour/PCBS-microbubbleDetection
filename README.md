@@ -4,7 +4,9 @@
 [*(O. Courure, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>)
 
 <p align="center">
-  <img width="460" height="300" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Mice%20brain.gif" alt = [*(O. Courure, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>)>
+  <img width="460" height="300" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Mice%20brain.gif">
+  <br>
+  <em>Fig. 2: The minimum dominating set of a graph</em>
 </p>
   
 
