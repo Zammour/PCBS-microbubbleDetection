@@ -6,7 +6,7 @@
 <p align="center">
   <img width="460" height="300" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Mice%20brain.gif">
   <br>
-  <em> From *(O. Courure, M. Tanter et al., 2018)*</em>
+  <em> From (O. Courure, M. Tanter et al., 2018)</em>
 </p>
   
 
