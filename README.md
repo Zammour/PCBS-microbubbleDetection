@@ -5,8 +5,7 @@
 
 <p align="center">
   | <img width="460" height="300" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Mice%20brain.gif"> |
-  |:--:| 
-  | [*(O. Courure, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>) |
+  <figcaption>[*(O. Courure, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>)</figcaption>
 </p>
   
 Echography is widely used in the clinic to detect vessels by means of the well known Doppler-effect. We can increase considerably the images by injecting parenterally contrast agent that are microbubbles of gas. We can further increase the acquisition time in order to detect microvessels up to tens of µm.
