@@ -1,12 +1,12 @@
 # PCBS-microbubbleDetection
 
 *The diffraction-limit has long represented an unreachable summit to conquer in ultrasound imaging. Within a few years after the introduction of optical localization microscopy, we proposed its acoustic alter-ego that exploits the micrometric localization of microbubble contrast agents to reconstruct the finest vessels in the body in-depth. [...] It has since been used in-vivo in the brain, the kidney and in tumors. In the clinic, ULM is bound to improve drastically our vision of the microvasculature, which could revolutionize the diagnosis of cancer, arteriosclerosis, stroke and diabetes, among others.*<br>
-[*(O. Courure, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>)
+[*(O. Couture, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>)
 
 <p align="center">
   <img width="460" height="300" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Mice%20brain.gif">
   <br>
-  <em> From (O. Courure, M. Tanter et al., 2018)</em>
+  <em> From (O. Couture, M. Tanter et al., 2018)</em>
 </p>
   
 
