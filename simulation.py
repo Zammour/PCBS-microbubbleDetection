@@ -7,6 +7,10 @@ Created on Sat Feb 20 21:31:57 2021
 """
 
 import numpy as np
+import vizualisation
+import simulate_microbubble_positions
+import microbubble_separation
+
 
 parameters = {}
 
