@@ -60,7 +60,6 @@ def cone_filter_separation(IQ, parameters):
         
     return IQ_separated
         
-        
 
 """
 def cone_filter_separation(IQ, minimal_speed=1, maximal_speed=50, frame_rate=50, n_subsets = 7, lateral_FOV = (0,12), depth_FOV = (0,12)):

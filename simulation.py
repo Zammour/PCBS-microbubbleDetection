@@ -21,11 +21,11 @@ parameters = {}
 
 parameters['number_of_bubbles'] = 25
 parameters['number_of_frames'] = 10
-parameters['frame_rate'] = 50 # in Hz
+parameters['frame_rate'] = 1000 # in Hz
 parameters['lateral_field_of_view'] = (-6,6) # in mm
 parameters['depth_field_of_view'] = (0,12) # in mm
-parameters['minimal_turning_rate'] = -10*np.pi # in rad/s
-parameters['maximal_turning_rate'] = 10*np.pi # in rad/s
+parameters['minimal_turning_rate'] = -100*np.pi # in rad/s
+parameters['maximal_turning_rate'] = 100*np.pi # in rad/s
 
 # Vizualisation settings
 
@@ -35,7 +35,7 @@ parameters['depth_spatial_frequency'] = 10 # in mm^-1
 # Cone filter settings
 
 parameters['minimal_speed'] = 1 # in mm/s
-parameters['maximal_speed'] = 100 # in mm/s
+parameters['maximal_speed'] = 300 # in mm/s
 parameters['number_of_subsets'] = 3
 
 
