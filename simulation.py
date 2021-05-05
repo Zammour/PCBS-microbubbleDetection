@@ -7,13 +7,6 @@ Created on Sat Feb 20 21:31:57 2021
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from simulate_microbubble_positions import *
-from simulation import *
-from vizualisation import *
-from microbubble_separation import *
-
 
 parameters = {}
 
@@ -41,15 +34,17 @@ parameters['number_of_subsets'] = 3
 
 ### Start simulation ###
 
-x, z = simulate_motion_complex(parameters)
+x, z = simulate_microbubble_positions.simulate_motion_complex(parameters)
 
-IQ = convert_position_to_IQ(x, z, parameters)
+IQ = simulate_microbubble_positions.convert_position_to_IQ(x, z, parameters)
 
-plot_bubble_trajectories(x,z, parameters)
+vizualisation.plot_bubble_trajectories(x,z, parameters)
 
-show_IQ_movie(IQ, parameters)
+vizualisation.show_IQ_movie(IQ, parameters)
 
-IQ_sep = cone_filter_separation(IQ, parameters)
+IQ_sep = microbubble_separation.cone_filter_separation(IQ, parameters)
 
-show_IQ_movie(IQ_sep[:,:,:,0], parameters)
-show_IQ_movie(IQ_sep[:,:,:,-1], parameters)
+vizualisation.show_IQ_movie(IQ_sep[:,:,:,0], parameters)
+vizualisation.show_IQ_movie(IQ_sep[:,:,:,-1], parameters)
+
+

@@ -22,7 +22,6 @@ def create_cone_filter(IQ, parameters, speed_range):
     fz_vector = np.linspace(-fz/2, fz/2, z_length)
 
     k_space = np.zeros((x_length, z_length))
-
     for i in range(x_length):
         for j in range(z_length):
             k_space[i,j] = np.sqrt(fx_vector[i]**2 + fz_vector[j]**2)
