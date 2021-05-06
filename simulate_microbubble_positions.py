@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+The model of microbubble flow in the vessels comes from "Tracking of Microbubbles with a Recurrent Neural Network for Super-Resolution Imaging", (D. Wilmes et al., 2020).
+The simple model assumes that the bubbles have a constant and relatively small curvature radius. Therefore, the vessels are almost circles.
+To be more realistic, the authors propsoed to vary randomly the curvature radius, in order to have more tortuous vessels. This is the complex model.
+
+NB: x and z refer to the positions of the microbubbles respectively on x-axis and z-axis. phi is the angle of the movement of the bubble.
+
+
 Created on Wed Apr 14 11:55:15 2021
 
 @author: zammour
@@ -9,100 +16,116 @@ Created on Wed Apr 14 11:55:15 2021
 import numpy as np
 import pandas as pd
 
-def simulate_motion_simple(parameters):
+def simulate_motion_simple(p):
     
-    n_bubbles = parameters['number_of_bubbles']
-    n_frame = parameters['number_of_frames']
-    f = parameters['frame_rate']
-    omega_min = parameters['minimal_turning_rate']
-    omega_max = parameters['maximal_turning_rate']
-    v_min = parameters['minimal_speed']
-    v_max = parameters['maximal_speed']
-    lateral_FOV = parameters['lateral_field_of_view']
-    depth_FOV = parameters['depth_field_of_view']
+    # Initialization
     
-    x = pd.DataFrame(np.zeros((n_bubbles,n_frame)))
-    z = pd.DataFrame(np.zeros((n_bubbles,n_frame)))
-    phi = pd.DataFrame(np.zeros((n_bubbles,n_frame)))
+    x = pd.DataFrame(np.zeros((p.number_of_bubbles, p.number_of_frames)))
+    z = pd.DataFrame(np.zeros((p.number_of_bubbles, p.number_of_frames)))
+    phi = pd.DataFrame(np.zeros((p.number_of_bubbles, p.number_of_frames)))
     
-    turning_rate = np.random.uniform(omega_min, omega_max, n_bubbles)
-    flow_velocity = np.random.uniform(v_min, v_max, n_bubbles)
+    x.iloc[:, 0] = np.random.uniform(p.lateral_field_of_view[0],
+                                     p.lateral_field_of_view[1],
+                                     p.number_of_bubbles)
+    z.iloc[:, 0] = np.random.uniform(p.depth_field_of_view[0],
+                                     p.depth_field_of_view[1],
+                                     p.number_of_bubbles)
+    phi.iloc[:, 0] = np.random.uniform(0,
+                                       2 * np.pi,
+                                       p.number_of_bubbles)
+    
+    turning_rate = np.random.uniform(p.minimal_turning_rate,
+                                     p.maximal_turning_rate,
+                                     p.number_of_bubbles)
+    flow_velocity = np.random.uniform(p.minimal_speed,
+                                      p.maximal_speed,
+                                      p.number_of_bubbles)
     curvature_radius = flow_velocity / turning_rate
 
-    x.iloc[:,0] = np.random.uniform(lateral_FOV[0],lateral_FOV[1],n_bubbles)
-    z.iloc[:,0] = np.random.uniform(depth_FOV[0],depth_FOV[1],n_bubbles)
-    phi.iloc[:,0] = np.random.uniform(0, 2*np.pi, n_bubbles)
+
     
-    for i in range(1,n_frame):
-        x.iloc[:,i] = x.iloc[:,i-1] + curvature_radius*(np.sin(phi.iloc[:,i-1]) - np.sin(phi.iloc[:,i-1] + turning_rate/f))
-        z.iloc[:,i] = z.iloc[:,i-1] + curvature_radius*(-np.cos(phi.iloc[:,i-1]) + np.cos(phi.iloc[:,i-1] + turning_rate/f))
-        phi.iloc[:,i] = phi.iloc[:,i-1] + turning_rate/f
+    # Simulation
+    
+    for i in range(1, p.number_of_frames): 
+        x.iloc[:,i] = x.iloc[:, i-1] + curvature_radius * (np.sin(phi.iloc[:, i-1]) - np.sin(phi.iloc[:, i-1] + turning_rate / p.frame_rate))
+        z.iloc[:,i] = z.iloc[:, i-1] + curvature_radius * ( - np.cos(phi.iloc[:, i-1]) + np.cos(phi.iloc[:, i-1] + turning_rate / p.frame_rate))
+        phi.iloc[:,i] = phi.iloc[:, i-1] + turning_rate / p.frame_rate
         
-    x_inaccuracy = np.random.normal(0, 5e-3, (n_bubbles, n_frame))
-    z_inaccuracy = np.random.normal(0, 5e-3, (n_bubbles, n_frame))
+    # Adding noise
+    
+    x_inaccuracy = np.random.normal(0, 5e-3, (p.number_of_bubbles, p.number_of_frames))
+    z_inaccuracy = np.random.normal(0, 5e-3, (p.number_of_bubbles, p.number_of_frames))
 
     x += x_inaccuracy
     z += z_inaccuracy
         
     return x, z
 
-
-def simulate_motion_complex(parameters):
+def simulate_motion_complex(p):
     
-    n_bubbles = parameters['number_of_bubbles']
-    n_frame = parameters['number_of_frames']
-    f = parameters['frame_rate']
-    omega_min = parameters['minimal_turning_rate']
-    omega_max = parameters['maximal_turning_rate']
-    v_min = parameters['minimal_speed']
-    v_max = parameters['maximal_speed']
-    lateral_FOV = parameters['lateral_field_of_view']
-    depth_FOV = parameters['depth_field_of_view']
+    # Initilization
     
-    x = pd.DataFrame(np.zeros((n_bubbles,n_frame)))
-    z = pd.DataFrame(np.zeros((n_bubbles,n_frame)))
-    phi = pd.DataFrame(np.zeros((n_bubbles,n_frame)))
+    x = pd.DataFrame(np.zeros((p.number_of_bubbles, p.number_of_frames)))
+    z = pd.DataFrame(np.zeros((p.number_of_bubbles, p.number_of_frames)))
+    phi = pd.DataFrame(np.zeros((p.number_of_bubbles, p.number_of_frames)))
     
-    turning_rate = np.random.uniform(omega_min, omega_max, (n_bubbles, n_frame))
-    flow_velocity = np.repeat(np.random.uniform(v_min,v_max, n_bubbles), n_frame).reshape((n_bubbles,n_frame))
+    x.iloc[:, 0] = np.random.uniform(p.lateral_field_of_view[0],
+                                    p.lateral_field_of_view[1],
+                                    p.number_of_bubbles)
+    z.iloc[:, 0] = np.random.uniform(p.depth_field_of_view[0],
+                                    p.depth_field_of_view[1],
+                                    p.number_of_bubbles)
+    phi.iloc[:, 0] = np.random.uniform(0,
+                                      2 * np.pi,
+                                      p.number_of_bubbles)
+    
+    turning_rate = np.random.uniform(p.minimal_turning_rate,
+                                     p.maximal_turning_rate,
+                                     (p.number_of_bubbles, p.number_of_frames))
+    flow_velocity = np.repeat(np.random.uniform(p.minimal_speed,
+                                                p.maximal_speed,
+                                                p.number_of_bubbles),
+                              p.number_of_frames).reshape((p.number_of_bubbles, p.number_of_frames))
     curvature_radius = flow_velocity / turning_rate
 
-    x.iloc[:,0] = np.random.uniform(lateral_FOV[0],lateral_FOV[1],n_bubbles)
-    z.iloc[:,0] = np.random.uniform(depth_FOV[0],depth_FOV[1],n_bubbles)
-    phi.iloc[:,0] = np.random.uniform(0, 2*np.pi, n_bubbles)
-    
-    for i in range(1,n_frame):
-        x.iloc[:,i] = x.iloc[:,i-1] + curvature_radius[:,i]*(np.sin(phi.iloc[:,i-1]) - np.sin(phi.iloc[:,i-1] + turning_rate[:,i]/f))
-        z.iloc[:,i] = z.iloc[:,i-1] + curvature_radius[:,i]*(-np.cos(phi.iloc[:,i-1]) + np.cos(phi.iloc[:,i-1] + turning_rate[:,i]/f))
-        phi.iloc[:,i] = phi.iloc[:,i-1] + turning_rate[:,i]/f
-        
-    x_inaccuracy = np.random.normal(0, 5e-3, (n_bubbles, n_frame))
-    z_inaccuracy = np.random.normal(0, 5e-3, (n_bubbles, n_frame))
 
+    # Simulation
+    
+    for i in range(1, p.number_of_frames):
+        x.iloc[:, i] = x.iloc[:, i-1] + curvature_radius[:, i] * (np.sin(phi.iloc[:, i-1]) - np.sin(phi.iloc[:, i-1] + turning_rate[:, i] / p.frame_rate))
+        z.iloc[:, i] = z.iloc[:, i-1] + curvature_radius[:, i] * ( - np.cos(phi.iloc[:, i-1]) + np.cos(phi.iloc[:, i-1] + turning_rate[:, i] / p.frame_rate))
+        phi.iloc[:, i] = phi.iloc[:, i-1] + turning_rate[:, i] / p.frame_rate
+        
+    # Adding noise
+    
+    x_inaccuracy = np.random.normal(0, 5e-3, (p.number_of_bubbles, p.number_of_frames))
+    z_inaccuracy = np.random.normal(0, 5e-3, (p.number_of_bubbles, p.number_of_frames))
     x += x_inaccuracy
     z += z_inaccuracy
-
+        
     return x, z
 
-def convert_position_to_IQ(x, z, parameters):
+
+
+def convert_position_to_IQ(x, z, p):
     
-    n_bubbles = parameters['number_of_bubbles']
-    n_frames = parameters['number_of_frames']
-    fx = parameters['lateral_spatial_frequency']
-    fz = parameters['depth_spatial_frequency']
-    lateral_FOV = parameters['lateral_field_of_view']
-    depth_FOV = parameters['depth_field_of_view']
+    # Initialization
     
-    model = np.zeros((int(max(lateral_FOV) - min(lateral_FOV))*fx , int(max(depth_FOV)-min(depth_FOV))*fz, n_frames))
-    
-    background_noise = np.random.normal(0, 0.1, model.shape)
-    
-    for frame in range(n_frames):
-        for bubble in range(n_bubbles):
-            x_index = int(x.iloc[bubble,frame]*fx)
-            z_index = int(z.iloc[bubble,frame]*fz)
-            if (x_index <= model.shape[0]-1) and (x_index >= 0) and (z_index <= model.shape[1]-1) and (z_index >= 0):
+    IQ = np.zeros((int((p.lateral_field_of_view[1] - p.lateral_field_of_view[0]) * p.lateral_spatial_frequency), int((p.depth_field_of_view[1] - p.depth_field_of_view[0]) * p.depth_spatial_frequency), p.number_of_frames))
         
-                model[x_index:x_index+2, z_index:z_index+2,frame] = 1
-        
-    return model + background_noise
+    # Conversion
+    
+    for frame in range(p.number_of_frames):
+        for bubble in range(p.number_of_bubbles):
+            x_index = int(x.iloc[bubble, frame] * p.lateral_spatial_frequency)
+            z_index = int(z.iloc[bubble, frame] * p.depth_spatial_frequency)
+            if (x_index <= IQ.shape[0] - 1) and (x_index >= 0) and (z_index <= IQ.shape[1] - 1) and (z_index >= 0):
+    
+                IQ[x_index:x_index + 2, z_index:z_index + 2, frame] = 1
+
+    # Adding noise
+
+    background_noise = np.random.normal(0, 0.1, IQ.shape)                
+    IQ += background_noise    
+    
+    return IQ

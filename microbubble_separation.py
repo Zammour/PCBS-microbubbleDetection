@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+'IQ' stands for In-phase-in-Quadrature, that comes from the signals (that are complex numbers) recorded using ultrasound devices.
+Herre, we will only take the real part of the signal. Therefore, here, 'IQ' is equivalent to an ultrasound movie.
+
+The present module filters the IQ data according to "Short Acquisition time Super- Resolution Ultrasound Microvessel imaging via Microbubble Separation" (C. Huang et al. 2020).
+Without entering in the detailed maths of the method, the authors used 3D spatio-temporalal filtering in the fourier domain. To isolate a specific speed in the IQ movies, they used oriented 3D cone filters.
+This allows to separate microbubbles depending on the speed and the orientation.
+In clinics this technique would be very useful when we have a lot of microbubbles that overlap so that can't be detected.
+
 Created on Sat Feb 20 21:31:57 2021
 
 @author: zammour
@@ -9,117 +17,62 @@ Created on Sat Feb 20 21:31:57 2021
 import numpy as np
 from numpy.fft import fftn, fftshift, ifftn, ifftshift
 
-def create_cone_filter(IQ, parameters, speed_range):
-    
-    f = parameters['frame_rate']
-    fx = parameters['lateral_spatial_frequency']
-    fz = parameters['depth_spatial_frequency']
-    
+def create_cone_filter(IQ, p, speed_range):
+        
     [x_length, z_length, t_length] = IQ.shape
     
-    f_vector = np.linspace(-f/2, f/2, t_length)
-    fx_vector = np.linspace(-fx/2, fx/2, x_length)
-    fz_vector = np.linspace(-fz/2, fz/2, z_length)
+    f_vector = np.linspace( - p.frame_rate / 2, p.frame_rate / 2, t_length)
+    fx_vector = np.linspace( - p.lateral_spatial_frequency / 2, p.lateral_spatial_frequency / 2, x_length)
+    fz_vector = np.linspace( - p.depth_spatial_frequency / 2, p.depth_spatial_frequency / 2, z_length)
 
     k_space = np.zeros((x_length, z_length))
     for i in range(x_length):
-        for j in range(z_length):
-            k_space[i,j] = np.sqrt(fx_vector[i]**2 + fz_vector[j]**2)
+        for j in range(z_length): 
+            k_space[i, j] = np.sqrt(fx_vector[i] ** 2 + fz_vector[j] ** 2)
             
     low_pass_cone = np.zeros(IQ.shape)
     high_pass_cone = np.zeros(IQ.shape)
 
     for frame in range(t_length):
-        low_pass_cone[:,:,frame] = k_space > abs(f_vector[frame])/speed_range[-1]
-        high_pass_cone[:,:,frame] = k_space < abs(f_vector[frame])/speed_range[0]
+        low_pass_cone[:, :, frame] = k_space > abs(f_vector[frame]) / speed_range[-1]
+        high_pass_cone[:, :, frame] = k_space < abs(f_vector[frame]) / speed_range[0]
 
     band_pass_cone = low_pass_cone * high_pass_cone
 
     return band_pass_cone
 
 
-
-def cone_filter_separation(IQ, parameters):
-    
-    v_min = parameters['minimal_speed']
-    v_max = parameters['maximal_speed']
-    n_subsets = parameters['number_of_subsets']
-
-    IQ_separated = np.zeros((IQ.shape +  tuple([n_subsets])), dtype=complex)
-    
-    speed_vector = np.linspace(v_min, v_max, n_subsets+2)
-    
-    fourier_domain = fftshift(fftn(IQ.astype(np.complex)))
-    
-    for subset in range(n_subsets):
+def create_orientation_filter(IQ):
         
-        band_pass_cone_filter = create_cone_filter(IQ, parameters, speed_vector[subset:subset+2])
-        
-        IQ_separated[:,:,:,subset] = np.abs(ifftn(ifftshift(fourier_domain * band_pass_cone_filter)))
-        
-    return IQ_separated
-        
-
-"""
-def cone_filter_separation(IQ, minimal_speed=1, maximal_speed=50, frame_rate=50, n_subsets = 7, lateral_FOV = (0,12), depth_FOV = (0,12)):
-    
     [x_length, z_length, t_length] = IQ.shape
     
-    IQ_separated = np.zeros((x_length, z_length, t_length, n_subsets), dtype=complex)
-                                
-    dx = (max(lateral_FOV)- min(lateral_FOV)) / x_length
-    dz = (max(depth_FOV)- min(depth_FOV)) / z_length
-    dt =  1/t_length/frame_rate
+    up_filter = np.zeros(IQ.shape)
+    up_filter[:, 1:int(z_length / 2), 1:int(t_length / 2)] = 1
+    up_filter[:, int(z_length / 2):, int(t_length / 2):] = 1
     
-    x_spatial_frequency = np.linspace(-1/dx/2, 1/dx/2, x_length)
-    z_spatial_frequency = np.linspace(-1/dz/2, 1/dz/2, z_length)
-    time_frequency = np.linspace(-1/dt/2, 1/dt/2, t_length)
+    down_filter = np.zeros(IQ.shape)
+    down_filter[:, 1:int(z_length / 2), int(t_length / 2):] = 1
+    down_filter[:, int(z_length / 2):, 1:int(t_length / 2)] = 1
     
+    return up_filter, down_filter 
+
+
+def cone_filter_separation(IQ, p):
     
-    k_space = np.zeros((x_length, z_length))
+    IQ_separated = np.zeros((IQ.shape +  tuple([2 * p.number_of_subsets])), dtype=complex)
     
-    for i in range(x_length):
-        for j in range(z_length):
-            k_space[i,j] = np.sqrt(x_spatial_frequency[i]**2 + z_spatial_frequency[j]**2)
-       
-    speed_vector = np.linspace(minimal_speed, maximal_speed, n_subsets+1)
-    
-    low_pass_cone = np.zeros(IQ.shape)
-    high_pass_cone = np.zeros(IQ.shape)
+    speed_vector = np.linspace(p.minimal_speed, p.maximal_speed, p.number_of_subsets+2)
     
     fourier_domain = fftshift(fftn(IQ.astype(np.complex)))
     
-    for subset in range(n_subsets):
-        for frame in range(t_length):
-            low_pass_cone[:,:,frame] = k_space > abs(time_frequency[frame])/speed_vector[subset+1]/1.5
-            high_pass_cone[:,:,frame] = k_space < abs(time_frequency[frame])/speed_vector[subset]/0.5
+    up_filter, down_filter = create_orientation_filter(IQ)
+    
+    for subset in range(p.number_of_subsets):
+                
+        band_pass_cone_filter = create_cone_filter(IQ, p, speed_vector[subset:subset + 2])
         
-        band_pass_cone = low_pass_cone * high_pass_cone
-        
-        IQ_filtered = np.abs(ifftn(ifftshift(fourier_domain * band_pass_cone)))
-        
-        IQ_separated[:,:,:,subset] = IQ_filtered
+        IQ_separated[:, :, :, subset] = np.abs(ifftn(ifftshift(fourier_domain * band_pass_cone_filter * up_filter)))
+        IQ_separated[:, :, :, subset + p.number_of_subsets] = np.abs(ifftn(ifftshift(fourier_domain * band_pass_cone_filter * down_filter)))
 
+        
     return IQ_separated
-
-def orientation_separation(IQ, minimal_speed=1, maximal_speed=50, frame_rate=50, lateral_FOV = (0,12), depth_FOV = (0,12)):
-    
-    [x_length, z_length, t_length] = IQ.shape
-    
-    IQ_separated = np.zeros((x_length, z_length, t_length, 2), dtype=complex)
-    
-    fourier_domain = fftshift(fftn(IQ.astype(np.complex)))
-
-    up = np.zeros(IQ.shape)
-    up[:, 1:int(z_length/2), 1:int(t_length/2)] = 1
-    up[:, int(z_length/2):, int(t_length/2):] = 1
-    
-    down = np.zeros(IQ.shape)
-    down[:, 1:int(z_length/2), int(t_length/2):] = 1
-    down[:, int(z_length/2):, 1:int(t_length/2)] = 1
-    
-    IQ_separated[:,:,:,0] = np.abs(ifftn(ifftshift(fourier_domain * up)))
-    IQ_separated[:,:,:,1] = np.abs(ifftn(ifftshift(fourier_domain * down)))
-
-    return IQ_separated
-"""
