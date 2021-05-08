@@ -24,7 +24,7 @@ parameters = pd.Series({
     # Motion simulation settings
     
     'number_of_bubbles' : 100,
-    'number_of_frames' : 10,
+    'number_of_frames' : 25,
     'frame_rate' : 1000, # in Hz
     'lateral_field_of_view' : (0, 12), # in mm
     'depth_field_of_view' : (0, 12), # in mm
