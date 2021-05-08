@@ -15,17 +15,17 @@
   
 Echography is widely used in the clinic to detect vessels by means of the well known Doppler-effect. We can increase considerably the images by injecting parenterally contrast agent that are microbubbles of gas. We can further increase the acquisition time in order to detect microvessels up to tens of µm.
 
-In this project, we aim to model *in silico* vessels by simulating microbubble loclization as in [*D . Wilmes et al.*](<https://ieeexplore.ieee.org/document/9251643>). Then, we will try to separate the microbubbles depending on their speed to improve detection, as in [*C. Huang et al., 2020*](<https://www.nature.com/articles/s41598-020-62898-9>).
+In this project, we aim to model *in silico* vessels by simulating microbubble localization as in [*D . Wilmes et al.*](<https://ieeexplore.ieee.org/document/9251643>). Then, we will try to separate the microbubbles depending on their speed to improve detection, as in [*C. Huang et al., 2020*](<https://www.nature.com/articles/s41598-020-62898-9>).
 
 
 ## How to use the program ?
   
 ### Parameters
  
-All the parameters can be set up in the main_simulation.py file. Then, the instrucitons should be written in this file also. Finally, just run the file.
+All the parameters can be set up in the main_simulation.py file. Then, the instructions must be written in the same file. Finally, just run the file.
 
 ### Workflow
-  1. Simulate microbubble positions using a simple or a complex model (see simulate_microbubble_position.py) and store x and y positions.
+  1. Simulate microbubble positions using a simple or a complex model (see simulate_microbubble_position.py) and store x and z positions.
   2. Plot the trajectories (function : 'plot_microbubble_positions')
   3. Convert x & z positions to a movie (function : 'convert_positions_to_IQ')
   4. Show the movie ( function : 'show_IQ_movie')
@@ -46,11 +46,12 @@ All the parameters can be set up in the main_simulation.py file. Then, the instr
 <br><br>
 
 Remarks:
-- The movie starts to lag because of the plotting calculations
+- The movie is lagging because of the plotting calculations
 - The bubbles becomes sparser because they have not contraints from biological vessels and can move theoreticaly to infinite
 
 ### Microbubble separation
 
+<br><br>
 <p align="center">
   <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/Low%20speed%20down.gif">
   <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/High%20speed%20down.gif">
@@ -60,7 +61,8 @@ Remarks:
   <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/Low%20speed%20up.gif">
   <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/High%20speed%20up.gif">
 </p>
+<br><br>
 
 Remarks:
 - We see that overall, the microbubbles movements follow the conditions of the filter
-- However, we see a lot of artefacts resulting from Gibbs ringing. We could improve a lot the images after the separation by choosing larger speed ranges and/or applying smooth filter (for example Gaussian or Butterworth filters)
+- However, we see a lot of artefacts resulting from [Gibbs phenomenon](https://en.wikipedia.org/wiki/Gibbs_phenomenon). We could improve a lot the images after the separation by choosing larger speed ranges and/or applying smooth filter (for example Gaussian or Butterworth filters)
