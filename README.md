@@ -3,11 +3,15 @@
 *The diffraction-limit has long represented an unreachable summit to conquer in ultrasound imaging. Within a few years after the introduction of optical localization microscopy, we proposed its acoustic alter-ego that exploits the micrometric localization of microbubble contrast agents to reconstruct the finest vessels in the body in-depth. [...] It has since been used in-vivo in the brain, the kidney and in tumors. In the clinic, ULM is bound to improve drastically our vision of the microvasculature, which could revolutionize the diagnosis of cancer, arteriosclerosis, stroke and diabetes, among others.*<br>
 [*(O. Couture, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>)
 
+<br><br><br>
 <p align="center">
+  <b>Rat brain</b>
+  <br>
   <img width="460" height="300" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Mice%20brain.gif">
   <br>
   <em> From (O. Couture, M. Tanter et al., 2018)</em>
 </p>
+<br><br><br>
   
 Echography is widely used in the clinic to detect vessels by means of the well known Doppler-effect. We can increase considerably the images by injecting parenterally contrast agent that are microbubbles of gas. We can further increase the acquisition time in order to detect microvessels up to tens of µm.
 
@@ -33,7 +37,19 @@ All the parameters can be set up in the main_simulation.py file. Then, the instr
 ### Simulation
 
 <p align="center">
-  <img width="460" height="300" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Mice%20brain.gif">
+<b>Trajectories of 100 microbubbles</b>
   <br>
-  <em> From (O. Couture, M. Tanter et al., 2018)</em>
+  <img width="361" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/Trajectories.png" title="Trajectories of 100 microbubbles">
 </p>
+
+<br><br><br>
+
+<p align="center">
+<b>Movie of the trajectories</b>
+  <br>
+<video style="width:70%" controls>
+  <source src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/High%20speed%20down.mp4">
+</video>
+</p>
+
+
