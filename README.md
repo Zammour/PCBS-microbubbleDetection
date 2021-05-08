@@ -3,7 +3,7 @@
 *The diffraction-limit has long represented an unreachable summit to conquer in ultrasound imaging. Within a few years after the introduction of optical localization microscopy, we proposed its acoustic alter-ego that exploits the micrometric localization of microbubble contrast agents to reconstruct the finest vessels in the body in-depth. [...] It has since been used in-vivo in the brain, the kidney and in tumors. In the clinic, ULM is bound to improve drastically our vision of the microvasculature, which could revolutionize the diagnosis of cancer, arteriosclerosis, stroke and diabetes, among others.*<br>
 [*(O. Couture, M. Tanter et al., 2018)*](<https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8396283>)
 
-<br><br><br>
+<br><br>
 <p align="center">
   <b>Rat brain</b>
   <br>
@@ -11,7 +11,7 @@
   <br>
   <em> From (O. Couture, M. Tanter et al., 2018)</em>
 </p>
-<br><br><br>
+<br><br>
   
 Echography is widely used in the clinic to detect vessels by means of the well known Doppler-effect. We can increase considerably the images by injecting parenterally contrast agent that are microbubbles of gas. We can further increase the acquisition time in order to detect microvessels up to tens of µm.
 
@@ -36,26 +36,31 @@ All the parameters can be set up in the main_simulation.py file. Then, the instr
 
 ### Simulation
 
+<br><br>
 <p align="center">
 <b>Trajectories of 100 microbubbles</b>
   <br>
   <img width="361" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/Trajectories.png" title="Trajectories of 100 microbubbles">
+  <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/Reference.gif" title="Reference">
 </p>
+<br><br>
 
-<br><br><br>
+Remarks:
+- The movie starts to lag because of the plotting calculations
+- The bubbles becomes sparser because they have not contraints from biological vessels and can move theoreticaly to infinite
+
+### Microbubble separation
 
 <p align="center">
-<b>Movie of the trajectories</b>
-  <br>
-<video style="width:70%" controls>
-  <source src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/High%20speed%20down.mp4">
-</video>
+  <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/Low%20speed%20down.gif">
+  <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/High%20speed%20down.gif">
 </p>
 
-https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/High%20speed%20down.mp4
+<p align="center">
+  <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/Low%20speed%20up.gif">
+  <img width="279" height="279" src="https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/High%20speed%20up.gif">
+</p>
 
-
-https://user-images.githubusercontent.com/61946463/117534054-1be5f800-aff0-11eb-95d8-51eb3eb3ab1d.mp4
-
-https://user-images.githubusercontent.com/61946463/117534894-a0864580-aff3-11eb-8410-98608a303c05.mp4
-
+Remarks:
+- We see that overall, the microbubbles movements follow the conditions of the filter
+- However, we see a lot of artefacts resulting from Gibbs ringing. We could improve a lot the images after the separation by choosing larger speed ranges and/or applying smooth filter (for example Gaussian or Butterworth filters)
