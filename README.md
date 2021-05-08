@@ -52,4 +52,7 @@ All the parameters can be set up in the main_simulation.py file. Then, the instr
 </video>
 </p>
 
+https://github.com/Zammour/PCBS-microbubbleDetection/blob/main/Results/High%20speed%20down.mp4
 
+
+https://user-images.githubusercontent.com/61946463/117534054-1be5f800-aff0-11eb-95d8-51eb3eb3ab1d.mp4
